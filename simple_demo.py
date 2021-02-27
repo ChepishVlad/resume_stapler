@@ -3,6 +3,8 @@ import os
 
 from fpdf import FPDF
 
+from blocks import set_personal_info, set_contact_info
+
 
 class CustomPDF(FPDF):
     def header(self):
@@ -43,17 +45,14 @@ def generating_file():
     telegramm = '@some_awesome_address'
 
     pdf.set_font('Century', size=14, style='B')
-    pdf.cell(200, 10, txt=fio, ln=1)
+    pdf.cell(0, 10, txt=fio, ln=1)
 
     # Personal information block
-    p_block_name = {'ru': 'Персональная информация'}
-    pdf.set_font('Century', size=12, style='B')
-    pdf.cell(200, 8, txt=p_block_name['ru'], ln=1)
-    pdf.set_font('Century', size=11)
-    pdf.cell(200, 8, txt=f'Локация: {location}', ln=1)
-    pdf.cell(200, 8, txt=f'Гражданство: {citizenship}', ln=1)
-    if birth_date:
-        pdf.cell(200, 8, txt=f'Дата рождения: {birth_date}', ln=1)
+    set_personal_info(pdf, location, citizenship, birth_date)
+
+    # Contact information block
+    set_contact_info(pdf, email, telegramm)
+
 
     # generation pdf file
     pdf.output('simple_demo.pdf')
