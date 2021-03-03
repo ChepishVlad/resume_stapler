@@ -7,14 +7,6 @@ def set_personal_info(pdf: FPDF,
                       citizenship: str,
                       birth_date: str = '',
                       language: str = 'ru'):
-    """
-    :param pdf: required parameter
-    :param location: required parameter
-    :param citizenship: required parameter
-    :param birth_date: not required parameter
-    :param language: by default got value = 'ru'
-    :return: pdf
-    """
     block_name = {
         'ru': 'Персональная информация',
         'en': 'Personal information'
@@ -39,7 +31,7 @@ def set_contact_info(pdf: FPDF,
         'en': 'Contact information'
         }
     pdf.set_font('Century', size=12, style='B')
-    pdf.cell(0, 8, txt=block_name[language], ln=1)
+    pdf.cell(0, 8, txt=block_name[language], border='B', ln=1)
     pdf.set_font('Century', size=11)
     pdf.cell(0, 8, txt=f'e-mail: {email}', ln=1)
     if telegram:
@@ -49,8 +41,13 @@ def set_contact_info(pdf: FPDF,
     pdf.cell(0, 8, txt='', ln=1)
 
 
-def set_work_experience(pdf: FPDF):
-    pass
+def set_work_experience(pdf: FPDF, works: dict):
+    for place in works:
+        pdf.set_font('Century', size=12, style='B')
+        pdf.cell(0, 8, txt="Опыт работы", border='B', ln=1)
+
+        for i in range(1, 130):
+            pdf.cell(0, 10, 'Here will be some text', ln=1)
 
 
 def set_education():
