@@ -56,17 +56,19 @@ works = {
 education = {
     'ed_1': {
         'years': '2014 - 2016',
-        'name': 'Институт системного программирования Российской академии '
-                'Аспирант, Прикладная математика',
+        'name': 'Институт системного программирования Российской академии',
         'grade': 'Аспирант, Прикладная математика'
         },
     'ed_2': {
         'years': '2014 - 2016',
-        'name': 'Институт системного программирования Российской академии '
-                'Аспирант, Прикладная математика',
+        'name': 'Институт системного программирования Российской академии',
         'grade': 'Аспирант, Прикладная математика'
         }
     }
+skills = ('- add some info \n'
+          '- correct some info\n'
+          '- add some info\n'
+          '- correct some info')
 
 
 class CustomPDF(FPDF):
@@ -156,6 +158,30 @@ class CustomPDF(FPDF):
         self.cell(0, 8, txt="Образование", border='B', ln=1)
         self.ln(3)
 
+        for key in _education:
+            place = _education[key]
+            self.ln(3)
+
+            col_width = self.w / 4.5
+            self.set_font('Century', size=11)
+            data_ed = [
+                [place['years'], place['name']],
+                ['', place['grade']]
+                ]
+            for row in data_ed:
+                self.multi_cell(
+                    col_width, 8, txt=row[0], border=0, ln=3, align='L')
+                self.multi_cell(
+                    col_width * 2.8, 8, txt=row[1], border=0, align='L')
+                self.ln(0)
+
+    def set_skills(self, _skills):
+        self.set_font('Century', size=12, style='B')
+        self.cell(0, 8, txt="Навыки", border='B', ln=1)
+        self.ln(3)
+        self.set_font('Century', size=11)
+        self.multi_cell(0, 8, txt=_skills, ln=1)
+
 
 def generating_file():
     pdf = CustomPDF()
@@ -171,18 +197,17 @@ def generating_file():
     pdf.set_font('Century', size=14, style='B')
     pdf.cell(0, 20, txt=fio, ln=1)
 
-    # Personal information block
     pdf.set_personal_info(
         _location=location, _citizenship=citizenship, _birth_date=birth_date)
 
-    # Contact information block
     pdf.set_contact_info(
         _email=email, _telegram=telegramm)
 
-    # experience
     pdf.set_work_experience(_works=works)
 
+    pdf.set_education(_education=education)
 
+    pdf.set_skills(_skills=skills)
 
     # generation pdf file
     pdf.output('simple_demo.pdf')
